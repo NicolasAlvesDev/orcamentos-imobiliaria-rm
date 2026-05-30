@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imobiliária R.M - Orçamentos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏢 Sistema de Orçamentos - Imobiliária R.M</h1>
+            <p>Preencha os dados abaixo para gerar o simulador de locação residencial.</p>
+        </header>
+
+        <main>
+            <section class="form-section">
+                <form action="/calcular" method="POST">
+                    <div class="form-group">
+                        <label for="tipo">Tipo de Imóvel:</label>
+                        <select name="tipo" id="tipo" onchange="alternarCampos()">
+                            <option value="1" {% if tipo == '1' %}selected{% endif %}>Apartamento</option>
+                            <option value="2" {% if tipo == '2' %}selected{% endif %}>Casa</option>
+                            <option value="3" {% if tipo == '3' %}selected{% endif %}>Estúdio</option>
+                        </select>
+                    </div>
+
+                    <div id="campos-quartos" class="form-group">
+                        <label for="quartos">Quantidade de Quartos:</label>
+                        <select name="quartos" id="quartos">
+                            <option value="1" {% if quartos == 1 %}selected{% endif %}>1 Quarto</option>
+                            <option value="2" {% if quartos == 2 %}selected{% endif %}>2 Quartos</option>
+                        </select>
+                    </div>
+
+                    <div id="campo-vagas" class="form-group" style="display: none;">
+                        <label for="vagas">Vagas de Estacionamento:</label>
+                        <input type="number" name="vagas" id="vagas" min="0" value="{{ vagas or 0 }}">
+                    </div>
+
+                    <div id="campos-adicionais" class="form-group-checkbox">
+                        <label>
+                            <input type="checkbox" name="garagem" value="S" {% if garagem %}checked{% endif %}>
+                            Deseja vaga de garagem? (+ R$ 300,00)
+                        </label>
+                        <label id="lbl-criancas">
+                            <input type="checkbox" name="criancas" value="S" {% if criancas %}checked{% endif %}>
+                            Possui crianças residindo? (Sem crianças = 5% de desc.)
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="parcelas">Parcelamento da Taxa de Contrato (R$ 2.000,00):</label>
+                        <select name="parcelas" id="parcelas">
+                            {% for n in range(1, 6) %}
+                            <option value="{{ n }}" {% if parcelas == n or (not parcelas and n == 5) %}selected{% endif %}>{{ n }}x</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-primary">📊 Calcular Orçamento</button>
+                </form>
+            </section>
+
+            {% if resultado %}
+            <section class="results-section">
+                <h2>📊 Resumo do Orçamento</h2>
+                <div class="cards-container">
+                    <div class="card">
+                        <h3>Aluguel Mensal</h3>
+                        <p class="valor">R$ {{ "%.2f"|format(resultado.aluguel) }}</p>
+                    </div>
+                    <div class="card">
+                        <h3>Parcela Contrato</h3>
+                        <p class="valor">R$ {{ "%.2f"|format(resultado.parcela_contrato) }}</p>
+                    </div>
+                    <div class="card">
+                        <h3>Total Inicial</h3>
+                        <p class="valor total">R$ {{ "%.2f"|format(resultado.total_inicial) }}</p>
+                    </div>
+                </div>
+
+                <h3>📅 Cronograma Anual (12 Meses)</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parcela</th>
+                                <th>Tipo</th>
+                                <th>Aluguel Mensal</th>
+                                <th>Parcela Contrato</th>
+                                <th>Total Mensal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for mes in tabela %}
+                            <tr>
+                                <td>{{ mes.parcela }}</td>
+                                <td>{{ mes.tipo }}</td>
+                                <td>{{ mes.aluguel }}</td>
+                                <td>{{ mes.contrato }}</td>
+                                <td><strong>{{ mes.total }}</strong></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <form action="/exportar" method="POST" style="margin-top: 20px;">
+                    <input type="hidden" name="tipo_imovel" value="{{ tipo }}">
+                    <input type="hidden" name="quartos" value="{{ quartos }}">
+                    <input type="hidden" name="vagas" value="{{ vagas }}">
+                    <input type="hidden" name="garagem" value="{{ 'S' if garagem else 'N' }}">
+                    <input type="hidden" name="criancas" value="{{ 'S' if criancas else 'N' }}">
+                    <input type="hidden" name="parcelas" value="{{ parcelas }}">
+                    <button type="submit" class="btn-secondary">💾 Exportar para CSV</button>
+                </form>
+
+                {% if msg_sucesso %}
+                <p class="success-msg">{{ msg_sucesso }}</p>
+                {% endif %}
+            </section>
+            {% endif %}
+        </main>
+    </div>
+
+    <script>
+        function alternarCampos() {
+            const tipo = document.getElementById("tipo").value;
+            const secaoQuartos = document.getElementById("campos-quartos");
+            const secaoVagas = document.getElementById("campo-vagas");
+            const chkGaragem = document.querySelector("input[name='garagem']").parentElement;
+            const lblCriancas = document.getElementById("lbl-criancas");
+
+            const isEstudio = tipo === "3";
+            const isApto = tipo === "1";
+
+            secaoQuartos.style.display = isEstudio ? "none" : "block";
+            secaoVagas.style.display = isEstudio ? "block" : "none";
+            chkGaragem.style.display = isEstudio ? "none" : "block";
+            lblCriancas.style.display = isApto ? "block" : "none";
+        }
+
+        window.onload = alternarCampos;
+    </script>
+</body>
+</html>

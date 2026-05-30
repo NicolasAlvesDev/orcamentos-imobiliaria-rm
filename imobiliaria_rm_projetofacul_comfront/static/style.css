@@ -1,0 +1,152 @@
+:root {
+    --azul: #3F51B5;
+    --verde: #2e7d32;
+    --fundo: #f5f6fa;
+    --branco: #ffffff;
+    --texto: #333333;
+    --borda: #dddddd;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--fundo);
+    color: var(--texto);
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--branco);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--fundo);
+    padding-bottom: 15px;
+}
+
+h1 {
+    color: var(--azul);
+    margin-bottom: 5px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+select,
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--borda);
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-group-checkbox label {
+    display: block;
+    font-weight: normal;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--azul);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #303f9f;
+}
+
+.btn-secondary {
+    background-color: var(--verde);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #1b5e20;
+}
+
+.cards-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.card {
+    flex: 1;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    text-align: center;
+    border: 1px solid var(--borda);
+}
+
+.card h3 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.card .valor {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--texto);
+}
+
+.card .total {
+    color: var(--azul);
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--borda);
+}
+
+th {
+    background-color: #f1f3f5;
+    color: #495057;
+}
+
+.success-msg {
+    color: var(--verde);
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
