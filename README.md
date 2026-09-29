@@ -3,11 +3,6 @@
 O objetivo principal é automatizar, organizar e agilizar o processo de geração de orçamentos de locação residencial,
 cobrindo três categorias de imóveis: Apartamentos, Casas e Estúdios.
 
-## 📺 Vídeo de Apresentação (Pitch)
-> 🎥 **Assista ao vídeo demonstrativo do sistema clicando no link abaixo:**
-> 
-> 👉 [**[CLIQUE AQUI PARA ASSISTIR AO VÍDEO PITCH]**](https://youtu.be/-f8Vt1te_DM)
-
 ## 📋 Funcionalidades e Regras de Negócio
 Tabela Base: Apartamentos (R$ 700,00), Casas (R$ 900,00) e Estúdios (R$ 1.200,00).
 Módulo de Apartamentos: Acréscimo de R$ 200,00 para 2º quarto, R$ 300,00 para garagem e **desconto de 5%** caso o locatário não possua crianças na familia.
